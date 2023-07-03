@@ -2,9 +2,46 @@
 
 The official reproduction repository for "Code Execution Capability as a Metric for Machine Learning--Assisted Software Vulnerability Detection Models".
 
+![Repo Logo](logo.jpg)
+
+<!-- Table of contents -->
+<details open="open">
+  <summary>Table of Contents</summary>
+
+1. [How to Use](#how-to-use)
+1. [Installation](#installation)
+    1. [Environments](#environments)
+    1. [Singularity](#singularity)
+1. [Datasets](#datasets)
+    1. [Dataset Preparation](#dataset-preparation)
+    1. [XGBoost Dataset Preparation](#xgboost-dataset-preparation)
+1. [Model Training](#model-training)
+    1. [Using Training Scripts](#using-training-scripts)
+    1. [Model Weights](#model-weights)
+1. [Model Testing](#model-testing)
+    1. [Using Test Scripts](#using-test-scripts)
+    1. [Predictions](#predictions)
+1. [Analysis](#analysis)
+1. [Contributing / Updates](#contributing--updates)
+1. [Acknowledgements](#acknowledgements)
+
+</details>
+
+
+## How to Use
+This repository contains all the code and files necessary to reproduce the results from the "Code Execution Capability as a Metric for Machine Learning--Assisted Software Vulnerability Detection Models" paper. 
+
+There are several places for you to begin the reproduction. Due to size restrictions, not all of the files are provided here. Please contact the author for additional files as needed. If you only want to analyze the results, the raw predictions are included in `logs/predictions` for simplicity.
+
+
+| Starting Point | Files to Request             |
+|----------------|------------------------------|
+| From Scratch   | None -- Follow instructions  |
+| Model Training | Dataset files                |
+| Model Testing  | Model weights                |
+| Analysis       | None -- Predictions included |
 
 ## Installation
-
 ### Environments
 Conda environments are provided in the `envs` directory. Because different models use different libraries, 5 separate environments are included. The table below lists each environments file, name, and the models that use it.
 
@@ -162,20 +199,44 @@ python embeddings_extractor.py --jsonl=data/jsonl/$DS/train.jsonl --output=data/
 python embeddings_extractor.py --jsonl=data/jsonl/$DS/valid.jsonl --output=data/embeddings/valid
 ```
 
+## Model Training
+### Using Training Scripts
+To train models from scratch, scripts are provided in `scripts/train`.
 
-## Lessons Learned
+| Model    | Command                            |
+|----------|------------------------------------|
+| CodeBERT | `./codebert.sh [dataset] [epochs]` |
+| CoTeXT   | `./cotext.sh [dataset] [epochs]`   |
+| LineVul  | `./linevul.sh [dataset] [epochs]`  |
+| ReGVD    | `./regvd.sh [dataset] [epochs]`    |
+| TextCNN  | `./textcnn.sh [dataset]`           |
+| XGBoost  | `./xgboost.sh [dataset]`           |
 
-What did you learn while building this project? What challenges did you face and how did you overcome them?
+Slurm scripts are provided in `scripts/slurm`. However, these scripts are heavily dependent upon the training environment. They will not work without modifications.
 
+### Model Weights
+Due to the size of model weights, we do not provide them in this repository. We would be happy to share them directly; simply email the corresponding author.
 
-## Running Tests
+## Model Testing
+### Using Test Scripts
+To test the models from scratch, scripts are provided in `scripts/test`. Each model may be tested in it's entirety or on individual datasets. The scripts below test the model on all combinations of datasets. See those scripts for individual testing.
 
-To run tests, run the following command
+| Model    | Script               |
+|----------|----------------------|
+| CodeBERT | `./test_codebert.sh` |
+| CoTeXT   | `./test_cotext.sh`   |
+| LineVul  | `./test_linevul.sh`  |
+| ReGVD    | `./test_regvd.sh`    |
+| TextCNN  | `./test_textcnn.sh`  |
+| XGBoost  | `./test_xgboost.sh`  |
 
-```bash
-  npm run test
-```
+### Predictions
+The raw predictions are available in `logs/predictions`. They are in a tab-delimited format. The first column contains the index of the sample and the second column contains the logit of a positive prediction.
 
+The files are named according to the format: `[MODEL]_[TRAIN DATASET]_on_[TEST DATASET].txt`
+
+## Analysis
+The analysis notebook is provided in `notebooks/analysis.ipynb`. It contains all the figures and metrics from the paper as well as a few additional.
 
 ## Contributing / Updates
 
@@ -184,22 +245,11 @@ As a reproduction repository, no updates will be made to this repository unless 
 ### Updates
 - No updates have been made
 
-
-## Features
-
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
-
-
-## Authors
-
-- [@octokatherine](https://www.github.com/octokatherine)
-
-
 ## Acknowledgements
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+Thank you to the authors of the original models, whose reproduction repositories we used as the basis for our code:
+
+- CodeBERT from [microsoft/CodeXGLUE](https://github.com/microsoft/CodeXGLUE/tree/main/Code-Code/Defect-detection/code)
+- CoTeXT from [Original Authors via Huggingface](https://huggingface.co/razent/cotext-1-ccg)
+- LineVul from [awsm-research/LineVul](https://github.com/awsm-research/LineVul)
+- ReGVD from [daiquocnguyen/GNN-ReGVD](https://github.com/daiquocnguyen/GNN-ReGVD)
 

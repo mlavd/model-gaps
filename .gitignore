@@ -1,5 +1,8 @@
 # Ignore data
-data/
+data/**/*.jsonl
+data/csv
+data/input
+data/embeddings
 lightning_logs/
 models/**/checkpoints
 models/**/saved_models
